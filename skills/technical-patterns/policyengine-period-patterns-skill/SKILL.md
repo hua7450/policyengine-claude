@@ -23,9 +23,9 @@ Essential patterns for handling different definition periods (YEAR, MONTH) in Po
 ## 1. Definition Periods in PolicyEngine US
 
 ### Available Periods
-- **YEAR**: Annual values (most common - 2,883 variables)
-- **MONTH**: Monthly values (395 variables)
-- **ETERNITY**: Never changes (1 variable - structural relationships)
+- **YEAR**: Annual values (most common)
+- **MONTH**: Monthly values
+- **ETERNITY**: Never changes (structural relationships)
 
 **Note:** QUARTER is NOT used in PolicyEngine US
 
@@ -77,8 +77,8 @@ class monthly_benefit_eligible(Variable):
         # Age is YEAR-defined, use period.this_year
         age = person("age", period.this_year)  # ✅ Gets full age
 
-        # is_pregnant is MONTH-defined, just use period
-        is_pregnant = person("is_pregnant", period)  # ✅ Same period
+        # is_pregnant is a boolean (STOCK type), period works fine
+        is_pregnant = person("is_pregnant", period)  # ✅ No auto-division for booleans
 
         return (age < 18) | is_pregnant
 ```

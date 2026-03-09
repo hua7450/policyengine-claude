@@ -293,10 +293,9 @@ ratio = np.divide(
 ### Real Examples in Codebase
 
 See these files for reference implementations:
-- `taxable_social_security.py` - person share of unit benefits
-- `mo_taxable_income.py` - AGI share allocation
-- `md_two_income_subtraction.py` - head's share of couple income
-- `ok_child_care_child_tax_credit.py` - AGI ratio
+- `weekly_hours_worked.py` - hours per week calculation
+- `loss_limited_net_capital_gains_person.py` - capital gains allocation
+- `mo_adjusted_gross_income.py` - AGI share allocation
 
 ---
 

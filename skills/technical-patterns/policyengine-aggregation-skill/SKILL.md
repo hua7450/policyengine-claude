@@ -60,16 +60,14 @@ class variable_name(Variable):
 ```python
 class tanf_gross_earned_income(Variable):
     value_type = float
-    entity = SPMUnit
+    entity = Person
     label = "TANF gross earned income"
     unit = USD
     definition_period = MONTH
 
-    adds = ["employment_income", "self_employment_income"]
-    # NO formula needed! Automatically:
-    # 1. Gets each person's employment_income
-    # 2. Gets each person's self_employment_income
-    # 3. Sums all values across SPM unit members
+    adds = "gov.hhs.tanf.cash.income.sources.earned"
+    # NO formula needed! Parameter list defines income sources.
+    # Automatically sums all listed sources across entity members.
 ```
 
 ### Example: Using Parameter List
@@ -81,9 +79,10 @@ class income_tax_refundable_credits(Variable):
 
     adds = "gov.irs.credits.refundable"
     # Parameter file contains list like:
-    # - earned_income_tax_credit
-    # - child_tax_credit
-    # - additional_child_tax_credit
+    # - eitc
+    # - refundable_ctc
+    # - refundable_american_opportunity_credit
+    # - recovery_rebate_credit
 ```
 
 ### Example: Counting Boolean Values
@@ -231,6 +230,8 @@ class household_total_income(Variable):
 This works across all entity hierarchies:
 - Person → Tax Unit
 - Person → SPM Unit
+- Person → Family
+- Person → Marital Unit
 - Person → Household
 - Tax Unit → Household
 - SPM Unit → Household
@@ -246,9 +247,10 @@ Parameters can define lists of variables to sum:
 description: List of refundable tax credits
 values:
   2024-01-01:
-    - earned_income_tax_credit
-    - child_tax_credit
-    - additional_child_tax_credit
+    - eitc
+    - refundable_ctc
+    - refundable_american_opportunity_credit
+    - recovery_rebate_credit
 ```
 
 **Usage in variable**:

@@ -578,7 +578,7 @@ Adding a state program to a federal aggregator can create circular dependencies.
 **MANDATORY before implementing any TANF:**
 - DC TANF: `/variables/gov/states/dc/dhs/tanf/`
 - IL TANF: `/variables/gov/states/il/dhs/tanf/`
-- TX TANF: `/variables/gov/states/tx/hhs/tanf/`
+- TX TANF: `/variables/gov/states/tx/tanf/`
 
 **Learn from them:**
 1. Variable organization

@@ -373,8 +373,7 @@ county_code: "06037"  # String for FIPS
 ### Variables That DON'T Exist
 
 Never use these (not in PolicyEngine):
-- `heating_expense`
-- `utility_expense`
+- `heating_expense` (use `heating_expenses` instead)
 - `utility_shut_off_notice`
 - `past_due_balance`
 - `bulk_fuel_amount`

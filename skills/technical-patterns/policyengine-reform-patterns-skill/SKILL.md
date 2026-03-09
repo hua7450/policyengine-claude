@@ -37,7 +37,7 @@ Comprehensive patterns for implementing policy reforms (proposed legislation, co
 |---|---|---|---|
 | 7 | **Test path**: `tests/policy/baseline/gov/states/...` (testing-patterns) | **Reform test path**: `tests/policy/contrib/states/{st}/{bill}/` or `tests/policy/contrib/{org}/{topic}/` | Different directory tree for contributed reforms. |
 | 8 | **No `reforms:` key** — tests run against baseline automatically (testing-patterns) | **Every test MUST have `reforms:` key** with full dotted import path to the module-level bypass instance (e.g., `reforms: policyengine_us.reforms.states.mt.hb268.mt_hb268_reform`) | Without this key, the test runs against baseline code and the reform variables don't exist. |
-| 9 | **No parameter toggles** in test input section (testing-patterns) | **Every test MUST set `gov.contrib.{...}.in_effect: true`** in the input section | The reform is off by default (`0000-01-01: false`). Tests must explicitly enable it or the reform logic won't execute. |
+| 9 | **No parameter toggles** in test input section (testing-patterns) | **Tests MUST set `gov.contrib.{...}.in_effect: true`** in the input section when the reform formula checks `in_effect` (e.g., `where(in_effect, reform_value, baseline_value)` pattern). Not needed when the reform purely overrides variables via the bypass instance. | The reform is off by default (`0000-01-01: false`). Tests must explicitly enable it when the formula gates on `in_effect`, or the reform logic won't execute. |
 | 10 | **Error margin**: `absolute_error_margin: 0.1` — "never use 1" (testing-patterns) | **Reform tests commonly use `absolute_error_margin: 1`** | Reform calculations often involve larger numbers (tax amounts, credits) where $1 tolerance is appropriate. Use `0.1` only when testing boolean-like outputs. |
 | 11 | **Person names**: always `person1`, `person2` — never descriptive (testing-patterns) | **Reform tests may use** `person1`/`child1` to clarify tax unit structure | Reform tests often need to distinguish adults from dependents for filing status and credit eligibility. `child1` is acceptable when it clarifies the test setup. Follow whichever convention the existing reform tests in the codebase use. |
 
@@ -532,7 +532,7 @@ def create_structural_reforms_from_parameters(parameters, period):
 
 ## 9. Test Pattern
 
-Reform tests use standard YAML format with two additions: the `reforms:` key and `in_effect: true`.
+Reform tests use standard YAML format with the `reforms:` key (always required) and `in_effect: true` (required when the reform formula checks `in_effect`).
 
 ```yaml
 - name: Single filer with newborn, income below threshold
@@ -566,7 +566,7 @@ Reform tests use standard YAML format with two additions: the `reforms:` key and
 | Element | Description |
 |---------|-------------|
 | `reforms:` | Full dotted path to the module-level reform instance |
-| `gov.contrib.{...}.in_effect: true` | Enables the reform for this test |
+| `gov.contrib.{...}.in_effect: true` | Enables the reform for this test. Only required when the reform formula checks `in_effect` (e.g., `where(in_effect, ...)` pattern); not needed when the reform purely overrides variables via the bypass instance. |
 | `state_code: XX` | Ensures `defined_for = StateCode.XX` passes |
 | `absolute_error_margin: 1` | Standard tolerance for floating-point |
 
@@ -761,7 +761,7 @@ Many reforms have different thresholds or rates by filing status. Always check i
 - [ ] Register in `reforms/reforms.py` (import, instantiate, add to list, add to combined apply)
 - [ ] If new credit: add `modify_parameters()` to inject into credit list
 - [ ] Create `tests/policy/contrib/states/{st}/{bill_id}/{reform_name}.yaml`
-  - [ ] Include `reforms:` key and `in_effect: true` in every test
+  - [ ] Include `reforms:` key in every test, and `in_effect: true` when the formula gates on `in_effect`
   - [ ] Cover eligibility, ineligibility, phase-out, filing statuses, edge cases
   - [ ] If nested `in_effect`: test sub-features independently
 - [ ] Create changelog fragment: `changelog.d/{branch-name}.added.md`
@@ -783,7 +783,7 @@ When validating a reform implementation, check ALL of the following:
 | 6 | Registration | Import + instantiate + list + combined apply in `reforms.py` |
 | 7 | `modify_parameters` | Present if reform adds a NEW credit/tax to a list parameter |
 | 8 | Test `reforms:` key | Every test has correct dotted import path to module-level instance |
-| 9 | Test `in_effect: true` | Every test enables the reform via `gov.contrib.{...}.in_effect: true` |
+| 9 | Test `in_effect: true` | Tests set `gov.contrib.{...}.in_effect: true` when the reform formula gates on `in_effect`; not needed when the reform purely overrides variables via bypass |
 | 10 | No hard-coded values | All amounts, rates, thresholds from parameters |
 | 11 | `defined_for` | State reforms have `defined_for = StateCode.XX` |
 | 12 | Filing status coverage | Tests cover at least SINGLE and JOINT |

@@ -266,8 +266,8 @@ Please address these issues and re-request review.
 ### Run Test Commands
 
 ```bash
-# Unit tests
-pytest policyengine_us/tests/policy/baseline/gov/
+# YAML unit tests
+policyengine-core test policyengine_us/tests/policy/baseline/gov/ -c policyengine_us
 
 # Integration tests
 policyengine-core test <path> -c policyengine_us

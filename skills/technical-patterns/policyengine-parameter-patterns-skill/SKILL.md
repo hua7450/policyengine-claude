@@ -34,7 +34,7 @@ metadata:
 Before naming, examine:
 - DC TANF: `/parameters/gov/states/dc/dhs/tanf/`
 - IL TANF: `/parameters/gov/states/il/dhs/tanf/`
-- TX TANF: `/parameters/gov/states/tx/hhs/tanf/`
+- TX TANF: `/parameters/gov/states/tx/tanf/`
 
 ### Naming Patterns
 
